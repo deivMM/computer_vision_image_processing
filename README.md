@@ -1,1 +1,1 @@
-To do list 
+A repository focused on computer vision and image processing techniques, including algorithms, examples, and applications.
