@@ -2,13 +2,13 @@ import os
 import cv2
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-images_path = os.path.join(script_dir, 'imagenes')
+images_path = os.path.join(script_dir, '00_data')
 
 [os.remove(f'{images_path}/{f}') for f in os.listdir(images_path)]
 
 
 i = 1
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
     print("Error: No se pudo abrir la cámara.")
