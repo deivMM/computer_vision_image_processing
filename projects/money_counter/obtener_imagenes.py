@@ -1,16 +1,21 @@
 import os
 import cv2
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
+try:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+except NameError:
+    script_dir = os.getcwd()
+
 images_path = os.path.join(script_dir, '00_data')
 
 # [os.remove(f'{images_path}/{f}') for f in os.listdir(images_path)]
 
-image_names = os.listdir(images_path)
+
+image_names = [f for f in os.listdir(images_path) if f.endswith('jpg')]
 
 if image_names:
-    im_n = [int(im_nanme.split("_")[1].split(".")[0]) for im_nanme in image_names if im_nanme.endswith('jpg')]
-    i = max(im_n)
+    im_n = [int(im_nanme.split("_")[1].split(".")[0]) for im_nanme in image_names]
+    i = max(im_n)+1
 else:
     i = 1
 
