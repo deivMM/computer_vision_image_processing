@@ -4,11 +4,17 @@ import cv2
 script_dir = os.path.dirname(os.path.abspath(__file__))
 images_path = os.path.join(script_dir, '00_data')
 
-[os.remove(f'{images_path}/{f}') for f in os.listdir(images_path)]
+# [os.remove(f'{images_path}/{f}') for f in os.listdir(images_path)]
 
+image_names = os.listdir(images_path)
 
-i = 1
-cap = cv2.VideoCapture(0)
+if image_names:
+    im_n = [int(im_nanme.split("_")[1].split(".")[0]) for im_nanme in image_names if im_nanme.endswith('jpg')]
+    i = max(im_n)
+else:
+    i = 1
+
+cap = cv2.VideoCapture(1)
 
 if not cap.isOpened():
     print("Error: No se pudo abrir la cámara.")
@@ -35,5 +41,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-
 
