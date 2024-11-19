@@ -33,7 +33,7 @@ while True:
     
     cv2.imshow('Presiona espacio para capturar la foto', frame)
 
-    key = cv2.waitKey(1)
+    key = cv2.waitKey(2)
     if key == 32:  # Tecla espacio
         image_n = f'image_{i}'
         frame = cv2.resize(frame, None, fx= .5, fy= .5)

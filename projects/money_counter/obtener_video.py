@@ -19,7 +19,7 @@ if videos_names:
 else:
     i = 1
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 # Check if the camera opened successfully
 if not cap.isOpened():
