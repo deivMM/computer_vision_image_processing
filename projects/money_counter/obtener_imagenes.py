@@ -2,8 +2,6 @@ import os
 import re
 import cv2
 
-
-
 ######################################################################
 # cambiarlo en un futuro y llamar a utils !!!
 def sort_list_of_fs_by_ascending_number(list_of_fs, r_pattern = ''):
@@ -19,8 +17,6 @@ def sort_list_of_fs_by_ascending_number(list_of_fs, r_pattern = ''):
     '''
     list_of_fs.sort(key=lambda el:int(re.search(f'{r_pattern}(\d+)',el).group(1)))
 ######################################################################
-
-
 
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
