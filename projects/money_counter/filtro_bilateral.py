@@ -18,7 +18,7 @@ except NameError:
     img_files = glob('training/*jpg')
 
 # Carga la imagen
-image_path_number= 0  # Cambia esta ruta a la imagen que quieres usar
+image_path_number= 10  # Cambia esta ruta a la imagen que quieres usar
 image = cv2.imread(img_files[image_path_number])
 
 def empty(x):
@@ -28,9 +28,9 @@ def empty(x):
 cv2.namedWindow('Filtro Bilateral')
 
 # Crear trackbars para los parámetros del filtro
-cv2.createTrackbar('d', 'Filtro Bilateral', 2, 20, empty)  # Diámetro del área
-cv2.createTrackbar('SigmaColor', 'Filtro Bilateral', 75, 200, empty)  # Desviación en color
-cv2.createTrackbar('SigmaSpace', 'Filtro Bilateral', 75, 200, empty)  # Desviación en coordenadas espaciales
+cv2.createTrackbar('d', 'Filtro Bilateral', 19, 20, empty)  # Diámetro del área
+cv2.createTrackbar('SigmaColor', 'Filtro Bilateral', 44, 200, empty)  # Desviación en color
+cv2.createTrackbar('SigmaSpace', 'Filtro Bilateral', 193, 200, empty)  # Desviación en coordenadas espaciales
 
 while True:
     # Leer los valores de los trackbars
@@ -42,6 +42,8 @@ while True:
     d = max(1, d)
 
     # Aplicar el filtro bilateral
+    # image = cv2.GaussianBlur(image, (3, 3), 1)
+    image = cv2.medianBlur(image, 3)
     filtered_image = cv2.bilateralFilter(image, d, sigma_color, sigma_space)
 
     # Mostrar la imagen filtrada
