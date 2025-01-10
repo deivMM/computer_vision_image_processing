@@ -12,13 +12,13 @@ from glob import glob
 
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    img_files = glob('training/*jpg')
+    img_files = glob('../data/images/*jpg')
 except NameError:
     script_dir = os.getcwd()
-    img_files = glob('training/*jpg')
+    img_files = glob('../data/images/*jpg')
 
 # Carga la imagen
-image_path_number= 10  # Cambia esta ruta a la imagen que quieres usar
+image_path_number= 0
 image = cv2.imread(img_files[image_path_number])
 
 def empty(x):

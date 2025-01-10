@@ -38,7 +38,7 @@ cv2.createTrackbar("S Max", "Trackbars", S_MAX_init, 255, nothing)
 cv2.createTrackbar("V Max", "Trackbars", V_MAX_init, 255, nothing)
 
 # Initialize the test image
-img_name = 'training/test_image_3.jpg'  # None for live capture
+img_name = '../data/images/coins.jpg'  # None for live capture
 frame = get_frame(img_name)
 
 # Create a window for displaying the combined result
@@ -69,7 +69,7 @@ while True:
     img_upper_bgr = cv2.cvtColor(np.full((100, 225, 3), upper_hsv, dtype=np.uint8), cv2.COLOR_HSV2BGR)
 
     # Combine images for trackbars and HSV view
-    hsv_image = cv2.imread('other_images/hsv_color_space.jpeg')
+    hsv_image = cv2.imread('../data/images/hsv_color_space.jpeg')
     combined_colors = np.hstack((img_lower_bgr, img_upper_bgr))
     combined_colors_resized = cv2.resize(combined_colors, (hsv_image.shape[1], hsv_image.shape[0]))
     final_combined = np.hstack((combined_colors_resized, hsv_image))
