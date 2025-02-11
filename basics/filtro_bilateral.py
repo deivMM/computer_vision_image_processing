@@ -43,7 +43,7 @@ while True:
 
     # Aplicar el filtro bilateral
     # image = cv2.GaussianBlur(image, (3, 3), 1)
-    image = cv2.medianBlur(image, 3)
+    image = cv2.medianBlur(image, 5)
     filtered_image = cv2.bilateralFilter(image, d, sigma_color, sigma_space)
 
     # Mostrar la imagen filtrada
