@@ -115,30 +115,6 @@ def get_images(folder_name, VidCap= 0, prefix_name = None):
 
     cap.release()
     cv2.destroyAllWindows()
-
-def get_video(VidCap= 0):
-    
-    cap = cv2.VideoCapture(VidCap)
-
-    if not cap.isOpened():
-        print("Error: No se pudo abrir la cámara.")
-        exit()
-    while True:
-        ret, frame = cap.read()
-
-        if not ret:
-            print("Error: No se pudo leer el frame.")
-            break
-        
-        cv2.imshow('Presiona espacio para capturar la foto', frame)
-
-        key = cv2.waitKey(2)
-
-        if key == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
     
     
 def get_video(folder_name, VidCap = 0):
