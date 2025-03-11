@@ -1,10 +1,97 @@
 import os
+import re
+import time
 import cv2
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from glob import glob
-import re
+import itertools
+
+# Funciones
+####
+# generate_design
+# medir_tiempo
+# imagen_con_texto
+# visualizar_color
+# get_color_from_circle
+# sort_list_of_fs_by_ascending_number
+# get_images
+# get_video
+####
+
+def generate_design(params, rename_index=False):
+    """
+    Genera un diseño de experimentos con todas las combinaciones posibles.
+    ejemplo: generate_design({'dp':[.5, 1.5, 11, 1], 'param2':[5, 25, 6,0]})
+
+    Args:
+        params (dict): Diccionario donde las claves son los nombres de los parámetros y
+                      los valores son listas de la forma [inicio, fin, num_puntos, sensibilidad].
+        rename_index (bool): Si es True, redefine los índices como Model_1, Model_2, ...
+
+    Returns:
+        pd.DataFrame: DataFrame con todas las combinaciones posibles de valores.
+    """
+    param_values = {
+        key: np.round(np.linspace(value[0], value[1], value[2]), value[3])
+        for key, value in params.items()
+    }
+
+    design = pd.DataFrame(
+        [row for row in itertools.product(*param_values.values())],
+        columns=param_values.keys()
+    )
+    
+    if rename_index:
+        design.index = [f"Model_{i+1}" for i in range(len(design))]
+    else:
+        design.index = range(1, len(design)+1)
+
+    return design
+
+def medir_tiempo(func, print_info = True):
+    def wrapper(*args, **kwargs):
+        inicio = time.perf_counter()
+        resultado = func(*args, **kwargs)
+        fin = time.perf_counter()
+        duracion = fin - inicio
+        if print_info:
+            if duracion < 60:
+                print(f"Tiempo de ejecución de {func.__name__}: {duracion:.6f} segundos")
+            elif duracion < 3600:
+                minutos = int(duracion // 60)
+                segundos = int(duracion % 60)
+                print(f"Tiempo de ejecución de {func.__name__}: {minutos} minutos y {segundos} segundos")
+            else:
+                horas = int(duracion // 3600)
+                minutos = int((duracion % 3600) // 60)
+                print(f"Tiempo de ejecución de {func.__name__}: {horas} horas y {minutos} minutos")
+        return resultado, duracion
+    return wrapper
+
+
+def imagen_con_texto(img, text, posicion= [[0, 0], [.3, .1]]):
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1
+    thickness = 2
+    img_h, img_w = img.shape[0], img.shape[1]
+    (text_width, text_height), _ = cv2.getTextSize(text, font, font_scale, thickness)
+    
+    rect_x1, rect_y1 = int(img_w * posicion[0][0]), int(img_h * posicion[0][1])
+    rect_x2, rect_y2 = int(img_w * posicion[1][0]), int(img_h * posicion[1][1])
+    
+    text_x_pos = ((rect_x2-rect_x1) - text_width) // 2 + int(rect_x1)
+    text_y_pos = ((rect_y2-rect_y1) + text_height) // 2 + int(rect_y1)
+    
+    overlay = img.copy()
+    cv2.rectangle(overlay, (rect_x1, rect_y1), (rect_x2, rect_y2), (100, 100, 100), -1) 
+
+    alpha = 0.5
+    img_blended = cv2.addWeighted(overlay, alpha, img, 1 - alpha, 0)
+
+    cv2.putText(img_blended, text, (text_x_pos, text_y_pos), font, font_scale , (0, 0, 0), thickness)
+
+    return img_blended
 
 def visualizar_color(color, formato='RGB'):
     """
