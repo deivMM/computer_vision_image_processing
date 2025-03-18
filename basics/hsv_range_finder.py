@@ -37,8 +37,10 @@ cv2.createTrackbar("H Max", "Trackbars", H_MAX_init, 179, nothing)
 cv2.createTrackbar("S Max", "Trackbars", S_MAX_init, 255, nothing)
 cv2.createTrackbar("V Max", "Trackbars", V_MAX_init, 255, nothing)
 
+
 # Initialize the test image
-img_name = '../data/images/coins.jpg'  # None for live capture
+# img_name = '../data/images/coins.jpg'  # None for live capture
+img_name = '../projects/money_counter/1_data/tr_02_image_6.jpg'  # None for live capture
 frame = get_frame(img_name)
 
 # Create a window for displaying the combined result

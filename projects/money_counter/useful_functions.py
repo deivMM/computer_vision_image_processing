@@ -6,9 +6,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import itertools
+from scipy import stats
 
 # Funciones
 ####
+# hue_promedio_anillo
 # generate_design
 # medir_tiempo
 # imagen_con_texto
@@ -18,6 +20,40 @@ import itertools
 # get_images
 # get_video
 ####
+
+def hue_promedio_anillo(img, x, y, radio_ext, grosor, visualizar=False):
+    # Convertir la imagen a HSV
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    
+    # Crear una máscara para el círculo exterior
+    mask_ext = np.zeros_like(hsv[:, :, 0], dtype=np.uint8)
+    cv2.circle(mask_ext, (x, y), radio_ext, 255, thickness=-1)
+    
+    # Crear una máscara para el círculo interior
+    mask_int = np.zeros_like(hsv[:, :, 0], dtype=np.uint8)
+    cv2.circle(mask_int, (x, y), radio_ext - grosor, 255, thickness=-1)
+    
+    # Obtener la máscara del anillo restando la interior a la exterior
+    mask_ring = cv2.bitwise_xor(mask_ext, mask_int)
+
+    # Extraer los valores de hue de los píxeles dentro del anillo
+    hues = hsv[:, :, 0][mask_ring == 255]
+
+    # Calcular el hue promedio
+    # hue_promedio = np.mean(hues) if hues.size > 0 else None
+    hue_promedio = stats.mode(hues, keepdims=True) if hues.size > 0 else None
+    
+    # Visualizar la imagen con el anillo resaltado
+    if visualizar:
+        img_viz = img.copy()
+        img_viz[mask_ring == 255] = [0, 0, 255]  # Pintar el anillo en rojo
+        f, ax = plt.subplots(1, 1, figsize=(6, 6))
+        ax.imshow(cv2.cvtColor(img_viz, cv2.COLOR_BGR2RGB))
+        ax.axis('off')
+        plt.show()
+    
+    return hue_promedio
+
 
 def generate_design(params, rename_index=False):
     """
@@ -173,7 +209,7 @@ def get_images(folder_name, VidCap= 0, prefix_name = None):
         i = 1
     
     cap = cv2.VideoCapture(VidCap)
-
+    time.sleep(2)
     if not cap.isOpened():
         print("Error: No se pudo abrir la cámara.")
         exit()

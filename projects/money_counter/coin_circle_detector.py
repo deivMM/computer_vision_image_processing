@@ -20,7 +20,21 @@ def coins_visualization(img, circulos, text=None):
     if text: plt.title(text)
     plt.show()
 
-def alg_1(image_path, vis_result=True, vis_proc = False, params=None):
+def image_prepros(img):
+    ####
+    # imgPre = cv2.GaussianBlur(img, (3,3), 7)
+    # imgPre = cv2.bilateralFilter(img, 9, 75, 75)
+    # imgPre = cv2.medianBlur(imgPre, 3)
+    ####
+    
+    imgPre = cv2.resize(img, None, fx = .5, fy=.5)    
+    
+    imgPre = cv2.bilateralFilter(imgPre, 9, 75, 75)
+    imgPre = cv2.GaussianBlur(imgPre, (5,5), 5)
+    
+    return imgPre
+
+def coins_detec_alg(image_path, vis_result=True, vis_proc = False, params=None):
     default_params = {
         "dp": 1.1, # Inverso de la resolución acumuladora
         "minDist": 40, # Distancia mínima entre centros de círculos || 80
@@ -34,18 +48,16 @@ def alg_1(image_path, vis_result=True, vis_proc = False, params=None):
         default_params.update(params)  # Sobreescribe los valores por los proporcionados    
     
     img = cv2.imread(image_path)
-    img = cv2.resize(img, None, fx = .5, fy=.5)
-    
-    imgPre = cv2.GaussianBlur(img, (7,7), 7)
-    imgPre = cv2.medianBlur(imgPre, 7)
-    
     if vis_proc:
         f, ax = plt.subplots(1, 1, figsize=(6, 6))
         ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         ax.axis('off')
         plt.title('original')
         plt.show()
-
+        
+    imgPre = image_prepros(img)
+    img = cv2.resize(img, None, fx = .5, fy=.5)
+    
     if vis_proc:
         f, ax = plt.subplots(1, 1, figsize=(6, 6))
         ax.imshow(cv2.cvtColor(imgPre, cv2.COLOR_BGR2RGB))
@@ -55,7 +67,7 @@ def alg_1(image_path, vis_result=True, vis_proc = False, params=None):
 
     hsv_image = cv2.cvtColor(imgPre, cv2.COLOR_BGR2HSV)
         
-    lower_green = np.array([41, 58, 0])  # Límite inferior (H, S, V)
+    lower_green = np.array([45, 58, 0])  # Límite inferior (H, S, V)
     upper_green = np.array([85, 255, 255])  # Límite superior (H, S, V)
 
     mask = cv2.inRange(hsv_image, lower_green, upper_green)
