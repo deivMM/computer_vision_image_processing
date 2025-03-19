@@ -1,0 +1,13 @@
+
+path: /Users/davidmarquezmonje/Library/Mobile Documents/com~apple~CloudDocs/coding/python/money_counter_yolo/dataset
+train: images
+val: images
+# Class names
+names:
+  0: moneda_2
+  1: moneda_1
+  2: moneda_050
+  3: moneda_020
+  4: moneda_010
+  5: moneda_005
+
