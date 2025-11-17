@@ -3,6 +3,8 @@
 
 # Ignorar archivos que comienzan por 000
 00*
+test_im**
+video_**
 
 # ignorar la carpeta scripts_pruebas
 # scripts_pruebas/
